@@ -71,8 +71,13 @@ sgminer -o stratum+tcp://localhost:22550 -u DJ7zB7c5BsB9UJLy1rKQtY7c6CQfGiaRLM -
 ##### I want to put this online for other users to use!
 You can totally do that with this! The more on P2P pool the merrier! But, you need to change the password for the dogecoind client to something other than superduperpassword12. You will need to download setup.sh to the server, chmod it, and then run it. Look through the script to find out where the password is stored for dogecoind.
 
+
 ##### What is up with all the litecoin things? 
 You can safely ignore that, I haven't swapped out the litecoin assets for dogecoin yet.
+
+
+##### My HW error rate is insainly high!
+This is normal, the node is setting up the difficulty for the first time. Let your miners run for maybe a minute or two and then restart them, everything should be fine.
 
 
 Worthy links
