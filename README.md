@@ -69,7 +69,14 @@ sgminer -o stratum+tcp://localhost:22550 -u DJ7zB7c5BsB9UJLy1rKQtY7c6CQfGiaRLM -
 
 
 ##### I want to put this online for other users to use!
-You can totally do that with this! The more on P2P pool the merrier! But, you need to change the password for the dogecoind client to something other than superduperpassword12. You will need to download setup.sh to the server, chmod it, and then run it. Look through the script to find out where the password is stored for dogecoind.
+You can totally do that with this! The more on P2P pool the merrier! But, you need to change the password for the dogecoind client to something other than superduperpassword12. Look through the script to find out where the password is stored for dogecoind.
+
+```Batchfile
+# How to run the setup script by itself.
+wget https://raw.github.com/hak8or/Personal_Doge_Picaxe/master/setup.sh
+chmod 777 setup.sh
+sudo ./setup.sh
+```
 
 
 ##### What is up with all the litecoin things? 
