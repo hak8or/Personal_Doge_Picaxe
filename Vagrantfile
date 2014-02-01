@@ -21,6 +21,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Disables the default shared folder vagrant does.
   config.vm.synced_folder ".", "/vagrant", disabled: true
+  
+  config.vm.provider "virtualbox" do |v|
+    # Memory is default at 490MB, p2p miner can require more if lots of
+    # mining is going on, so lets bump it up to 576 MB. Some gets reserved.
+    v.memory = 600
+  end
 
   # Script to setup the node.
   config.vm.provision "shell", path: "provision.sh"
