@@ -49,7 +49,7 @@ P2P pool works based on [PPLNS] (https://litecoin.info/Mining_pool_comparison#Re
 
 
 ##### How should I get to the moon if my payouts are so low!?
-P2P pool is as of January 30th about only 1.53 Mhash/s, a far cry from the total network hash rate of about 90 Mhash/s. This means that the pool will find blocks more rarely. Also, you might have too low of a hash rate to even get on the payout list, so it is recommended for you to have at least 300 Khash/s. While payouts are sporadic, over time they will even out.
+P2P pool is as of January 30th about only 1.53 Ghash/s, a far cry from the total network hash rate of about 90 Ghash/s. This means that the pool will find blocks more rarely. Also, you might have too low of a hash rate to even get on the payout list, so it is recommended for you to have at least 300 Khash/s. While payouts are sporadic, over time they will even out.
 
 
 ##### I am running different cards, and one is getting a lot of rejects!
