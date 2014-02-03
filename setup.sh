@@ -163,8 +163,12 @@ echo ""
 echo "To find out when you will start getting paid out, use this"
 echo "tool: http://www.nckpnny.com/sharecalc/"
 
-Current_IP=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
-miner_target=$Current_IP
-miner_target+=":22550"
+if [[ $1 == "vagrant" ]]; then
+	miner_target=localhost:22550
+else
+	miner_target=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
+	miner_target+=":22550"
+fi
+
 echo "Point your miner at: $miner_target"
 echo "Node web GUI: $miner_target"
