@@ -51,6 +51,19 @@ screen -x myp2pool # Optional, run to see pool output
 
 Troubleshooting
 ---------------
+##### *Confused shibe here!* What do I put in my mining program's command line? 
+I use [sgminer] (https://github.com/veox/sgminer) instead of cgminer since it is now actively developed for GPU mining unlike CGMiner's creator who does not wish to support alt-coins. The address is the foundation's general donation fund, so feel free to use it while testing.
+``` sgminer -o stratum+tcp://localhost:22550 -u DJ7zB7c5BsB9UJLy1rKQtY7c6CQfGiaRLM -p x -I 20 ```
+
+
+##### I am running different cards, and one is getting a lot of rejects! How do I set share diff?
+A very good reject ratio is about 10%, %10-%15 is alright, but above 20% is not ideal. What is probably happening is your higher hash rate card is making the nodes difficulty go up further than your slower card can handle. Try adding to your username a fixed share difficulty for the slower card by multiplying the hash rate of your card by 0.0000166 with a plus sign. For example, a 7950 runs at 600 Khash/s, so you do 0.0000166 * 600 to give you 0.00996. 
+
+Then your new username will be ``` DJ7zB7c5BsB9UJLy1rKQtY7c6CQfGiaRLM+0.00996 ```, which gives you this in the command line: ``` sgminer -o stratum+tcp://localhost:22550 -u DJ7zB7c5BsB9UJLy1rKQtY7c6CQfGiaRLM+0.00996 -p x -I 20 ```.
+
+If you want to do this on a per card basis in a multi-card setup, with each card getting a different share difficulty, then you will need to run a separate sgminer process for cards with different share difficulties. 
+
+
 ##### I have been mining for over 12 hours and nothing!
 P2P pool works based on [PPLNS] (https://litecoin.info/Mining_pool_comparison#Reward_types), which is designed to combat pool hoppers. One side effect is that your first payout will be a while, from 3 to 24 hours. If you get nothing after 24 hours, then best to do some googling or looking around on /r/dogecoinmining for help. You can also use the fantastic [sharecalc] (http://www.nckpnny.com/sharecalc/) tool for getting an estimate of your first payout.
 
@@ -59,20 +72,8 @@ P2P pool works based on [PPLNS] (https://litecoin.info/Mining_pool_comparison#Re
 P2P pool is as of January 30th about only 1.53 Ghash/s, a far cry from the total network hash rate of about 90 Ghash/s. This means that the pool will find blocks more rarely. Also, you might have too low of a hash rate to even get on the payout list, so it is recommended for you to have at least 300 Khash/s. While payouts are sporadic, over time they will even out.
 
 
-##### I am running different cards, and one is getting a lot of rejects!
-A very good reject ratio is about 10%, %10-%15 is alright, but above 20% is not ideal. What is probably happening is your higher hash rate card is making the nodes difficulty go up further than your slower card can handle. Try adding in to your username a fixed share difficulty for the slower card by multiplying the hash rate of your card by 0.0000166. For example, my 7950 runs at 600 Khash/s, so you do 0.0000166 * 600 to give you 0.00996. Then your new username will be 
-``` DJ7zB7c5BsB9UJLy1rKQtY7c6CQfGiaRLM+0.00996 ```
-
-
 ##### Ok, my rejects are much better but still not ideal, what can I do?
 This should only be happening if you are running multiple different cards on the node. Try to decrease the share difficulty (the +somenumber) value on the slower card with more rejects.
-
-
-##### *Confused shibe here!* What do I put in my mining program's command line? 
-I use [sgminer] (https://github.com/veox/sgminer) instead of cgminer since it is now actively developed for GPU mining unlike CGMiner's creator who does not wish to support alt-coins. The address is the foundation's general donation fund, so feel free to use it while testing.
-```Bashfile
-sgminer -o stratum+tcp://localhost:22550 -u DJ7zB7c5BsB9UJLy1rKQtY7c6CQfGiaRLM -p x -I 20
-```
 
 
 ##### I want to put this online for other users to use!
