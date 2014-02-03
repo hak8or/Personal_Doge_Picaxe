@@ -13,7 +13,7 @@ Why would you want to do this?
 Why would you want to use P2P pool in the first place?
 - P2P pool cannot be used for a 51% attack.
 - P2P pool is very scalable, it can easily handle the entire dogecoin hash rate.
-- There is no owner! Not only does this prevent the pool being used for a 51% attack, it also means no one will steal your coins!
+- There is no owner! Not only does this prevent the pool being used for a 51% attack, it also means no one can steal your coins!
 - You also get in on transaction fee's! (?)
 
 
