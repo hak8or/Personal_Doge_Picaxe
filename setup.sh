@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-
-# This downloads ruby from source, installs rails, installs ngnix, and configures everything to work together.
 echo "+----------------------------------------------------+"
 echo "|     Sets up a P2P mining node for you locally!     |"
 echo "|                                                    |"
