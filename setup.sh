@@ -132,36 +132,29 @@ _EOF_
 	    cd $working_directory/p2pool/litecoin_scrypt &>>$log_location
 		sudo python setup.py install &>>$log_location
 
-echo "+--------------------  ALL DONE  --------------------+"
 echo ""
+
 echo "----FROM SCRIPT ECHO---- ALL DONE!!!!" &>>$log_location
+echo "+--------------------------------  ALL DONE  --------------------------------+"
+echo "|                                                                            |"
 
 # Done for the most part, now just need to wait for the dogecoin client to sync.
-echo "Below is the current amount of the blocks your client has synced up to."
-echo "You need to wait till this gets to the same number as blocks in chain on"
-echo "dogechain.info"
 cd $working_directory
-./dogecoind getinfo | grep "blocks"
-echo ""
+block_count=$(./dogecoind getinfo | grep "blocks")
+echo "|  Your current block progress: $block_count.                      |"
+echo "|  You need to wait till this gets to the same number as 'blocks in chain'   |"
+echo "|  on dogechain.info                                                         |"
+echo "|                                                                            |"
 
-echo "Run to see what you are up to: ./dogecoind getinfo | grep blocks"
-echo "This make take a few solid hours, so ... yeah. Go browse"
-echo "/r/dogecoin in the meantime!"
-echo ""
+echo "|  Run to see what you are up to: ./dogecoind getinfo | grep blocks          |"
+echo "|  This make take a few solid hours, so ... yeah. Go browse /r/dogecoin in   |"
+echo "|  the meantime!                                                             |"
+echo "|                                                                            |"
 
-echo "Once this finishes, run the following: "
-echo "screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin $rpc_username $rpc_password"
-echo "And the following to see what is up: screen -x myp2pool"
-echo ""
-
-echo "Your HW error rate will be massive for the first few minutes"
-echo "since the pool is adjusting its difficulty. Do not fret, for"
-echo "all you need to do is restart your miner after a few minutes"
-echo "and all will be splendid!"
-echo ""
-
-echo "To find out when you will start getting paid out, use this"
-echo "tool: http://www.nckpnny.com/sharecalc/"
+echo "|  Once this finishes, run the following:                                    |"
+echo "| screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin $rpc_username $rpc_password"
+echo "|  And the following to see what is up: screen -x myp2pool                   |"
+echo "|                                                                            |"
 
 if [[ $1 == "vagrant" ]]; then
 	miner_target=localhost:22550
@@ -170,5 +163,6 @@ else
 	miner_target+=":22550"
 fi
 
-echo "Point your miner at: $miner_target"
-echo "Node web GUI: $miner_target"
+echo "|  Point your miner at: $miner_target                                      |"
+echo "|  Node web GUI: $miner_target                                             |"
+echo "+--------------------------------  ALL DONE  --------------------------------+"
