@@ -87,6 +87,12 @@ sudo ./setup.sh
 ```
 
 
+##### I want to change the RPC credentials!
+There is no very easy way to do this, but what I reccomend is change your credentials in ``` ~/.dogecoin/dogecoin.conf ``` for rpc_username and rpc_password, restart the dogecoin client (just restart the machine with ``` sudo reboot ``` for simplicity), and then when running that super long ``` screen ... ~/p2pool/run_p2pool.py rpc_username_goes_here rpc_password_goes_here``` command use your new credentials. 
+
+If you know what you are doing, just fork the repo and change rpc_username and rpc_password in ``` setup.sh ``` to what you want, along with what to wget in ``` provision.sh ```.
+
+
 ##### What is up with all the litecoin things? 
 You can safely ignore that, I haven't swapped out the litecoin assets for dogecoin yet.
 
