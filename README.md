@@ -29,23 +29,19 @@ So, how do you get started? Easy!
 git clone git://github.com/hak8or/Personal_Doge_Picaxe.git
 cd Personal_Doge_Picaxe
 vagrant up # Now we wait ...
-vagrant ssh
 ```
-4) Wait for the dogecoin client to download the blockchain, which can take a few solid hours. Go browse /r/dogecoin in the meantime! You can see what block the client is up to by using ```./dogecoind getinfo | grep blocks ```, and compare it to "Blocks in Chain" on [dogechain.info] (http://dogechain.info/chain/Dogecoin).
+4) Wait for the dogecoin client to download the blockchain, which can take a few solid hours. Go browse /r/dogecoin in the meantime!
 
-5) Once the dogecoin client is done downloading the blockchain, run the following to start p2p pool.
-```Batchfile
-screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin cooluser superduperpassword12
-```
+5) Once the dogecoin client is done downloading the blockchain, you can point your miners to your new local node by using ```localhost:22550```
 
-6) Point your miner at ```localhost:22550```
+6) 
 
 You can view the nodes status as well as your mining results at ```localhost:22550``` and the pools output with the ```screen -x myp2pool``` command.
 
 If you restarted, then run the following to get everything back up.
 ```Batchfile
 sudo ./dogecoind
-screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin cooluser superduperpassword12
+screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin your_rpc_username your_rpc_password
 screen -x myp2pool # Optional, run to see pool output
 ```
 
@@ -77,7 +73,7 @@ This should only be happening if you are running multiple different cards on the
 
 
 ##### I want to put this online for other users to use!
-You can totally do that with this! The more on P2P pool the merrier! But, you need to change the password for the dogecoind client to something other than superduperpassword12. Look through the script to find out where the password is stored for dogecoind.
+You can totally do that with this! The more on P2P pool the merrier! Run the following few commands which uses the script itself, the core of this project, to setup the node.
 
 ```Batchfile
 # How to run the setup script by itself.
@@ -85,12 +81,6 @@ wget https://raw.github.com/hak8or/Personal_Doge_Picaxe/master/setup.sh
 chmod 777 setup.sh
 sudo ./setup.sh
 ```
-
-
-##### I want to change the RPC credentials!
-There is no very easy way to do this, but what I reccomend is change your credentials in ``` ~/.dogecoin/dogecoin.conf ``` for rpc_username and rpc_password, restart the dogecoin client (just restart the machine with ``` sudo reboot ``` for simplicity), and then when running that super long ``` screen ... ~/p2pool/run_p2pool.py rpc_username_goes_here rpc_password_goes_here``` command use your new credentials. 
-
-If you know what you are doing, just fork the repo and change rpc_username and rpc_password in ``` setup.sh ``` to what you want, along with what to wget in ``` provision.sh ```.
 
 
 ##### What is up with all the litecoin things? 
