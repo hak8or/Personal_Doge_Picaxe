@@ -11,7 +11,7 @@ echo "|                                                    |"
 echo "+----------------------------------------------------+"
 
 rpc_username=cooluser
-rpc_password=superduperpassword12
+rpc_password=$(strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo)
 
 # When the script gets provisioned on a vagrant box, the current home directory is root,
 # which is not what we want. So, if the vagrant option is put in from the vagrantfile then
