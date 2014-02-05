@@ -30,11 +30,9 @@ git clone git://github.com/hak8or/Personal_Doge_Picaxe.git
 cd Personal_Doge_Picaxe
 vagrant up # Now we wait ...
 ```
-4) Wait for the dogecoin client to download the blockchain, which can take a few solid hours. Go browse /r/dogecoin in the meantime!
+3) Wait for the dogecoin client to download the blockchain, which can take a few solid hours. Go browse /r/dogecoin in the meantime!
 
-5) Once the dogecoin client is done downloading the blockchain, you can point your miners to your new local node by using ```localhost:22550```
-
-6) 
+4) Once the dogecoin client is done downloading the blockchain, you can point your miners to your new local node by using ```localhost:22550```
 
 You can view the nodes status as well as your mining results at ```localhost:22550``` and the pools output with the ```screen -x myp2pool``` command.
 
