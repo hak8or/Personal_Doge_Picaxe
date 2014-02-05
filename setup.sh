@@ -146,6 +146,17 @@ echo "|  This make take a few solid hours, so ... yeah.    |"
 echo "|  Go browse /r/dogecoin in the meantime!            |"
 echo "|                                                    |"
 
+# Get a new block count.
+wget -O dogechain_block.txt -P $working_directory http://dogechain.info/chain/Dogecoin/q/getblockcount &>>$log_location
+
+# Throw that block count into a bash variable for comparing.
+dogechain_info_block_count=$(cat $working_directory/dogechain_block.txt)
+
+# Get the current block count we are synced up to and clean up the output
+# so we only get the number.
+client_block_count=$(./dogecoind getinfo | grep "blocks")
+client_block_count=${client_block_count:15:-1}
+	
 # Keep refreshing this display and check every two minutes so we can know
 # the blockchain is fully synced.
 until [[ $client_block_count -eq  $dogechain_info_block_count ]]; do
