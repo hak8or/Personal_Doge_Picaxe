@@ -132,29 +132,54 @@ _EOF_
 	    cd $working_directory/p2pool/litecoin_scrypt &>>$log_location
 		sudo python setup.py install &>>$log_location
 
-echo ""
-
-echo "----FROM SCRIPT ECHO---- ALL DONE!!!!" &>>$log_location
-echo "+--------------------------------  ALL DONE  --------------------------------+"
-echo "|                                                                            |"
+	echo ""
 
 # Done for the most part, now just need to wait for the dogecoin client to sync.
-cd $working_directory
-block_count=$(./dogecoind getinfo | grep "blocks")
-echo "|  Your current block progress: $block_count.                      |"
-echo "|  You need to wait till this gets to the same number as 'blocks in chain'   |"
-echo "|  on dogechain.info                                                         |"
-echo "|                                                                            |"
+echo "----FROM SCRIPT ECHO---- Waiting for blockchain to finish syncing." &>>$log_location
+echo "+----------------------------------------------------+"
+echo "|                                                    |"
+echo "|  And now we wait, since the Dogecoin client must   |"
+echo "|  sync with the blockchain.                         |"
+echo "|  Your current block progress: $client_block_count / $dogechain_info_block_count"
+echo "|                                                    |"
+echo "|  This make take a few solid hours, so ... yeah.    |"
+echo "|  Go browse /r/dogecoin in the meantime!            |"
+echo "|                                                    |"
 
-echo "|  Run to see what you are up to: ./dogecoind getinfo | grep blocks          |"
-echo "|  This make take a few solid hours, so ... yeah. Go browse /r/dogecoin in   |"
-echo "|  the meantime!                                                             |"
-echo "|                                                                            |"
+# Keep refreshing this display and check every two minutes so we can know
+# the blockchain is fully synced.
+until [[ $client_block_count -eq  $dogechain_info_block_count ]]; do
+	# Delete the old block count file from dogechain.info
+	rm $working_directory/dogechain_block.txt
 
-echo "|  Once this finishes, run the following:                                    |"
-echo "| screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin $rpc_username $rpc_password"
-echo "|  And the following to see what is up: screen -x myp2pool                   |"
-echo "|                                                                            |"
+	# Get a new block count.
+	wget -O dogechain_block.txt -P $working_directory http://dogechain.info/chain/Dogecoin/q/getblockcount &>>$log_location
+
+	# Throw that block count into a bash variable for comparing.
+	dogechain_info_block_count=$(cat $working_directory/dogechain_block.txt)
+
+	# Get the current block count we are synced up to and clean up the output
+	# so we only get the number.
+	client_block_count=$(./dogecoind getinfo | grep "blocks")
+	client_block_count=${client_block_count:15:-1}
+
+	# Overwrite the previous line in the terminal so user can see how far 
+	# the syncing process is so far.
+	echo -en "Your current block progress: $client_block_count of $dogechain_info_block_count \r"
+
+	# Delay two minutes so we do not pummel the dogechain.info API.
+	sleep 2m
+done
+
+# Start the P2P pool so users can connect their miners.
+screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin $rpc_username $rpc_password
+
+echo "+--------------------  ALL DONE  --------------------+"
+echo "|                                                    |"
+echo "|  RPC Username: $rpc_username                            |"
+echo "|  RPC Password: $rpc_password      |"
+echo "|  Status of p2p pool: screen -x myp2pool            |"
+echo "|                                                    |"
 
 if [[ $1 == "vagrant" ]]; then
 	miner_target=localhost:22550
@@ -163,6 +188,6 @@ else
 	miner_target+=":22550"
 fi
 
-echo "|  Point your miner at: $miner_target                                      |"
-echo "|  Node web GUI: $miner_target                                             |"
-echo "+--------------------------------  ALL DONE  --------------------------------+"
+echo "|  Point your miner at: $miner_target              |"
+echo "|  Node web GUI: $miner_target                     |"
+echo "+----------------------------------------------------+"
