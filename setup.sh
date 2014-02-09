@@ -178,7 +178,7 @@ done
 echo "|  Done syncing blockchain!                          |"
 
 # Start the P2P pool so users can connect their miners.
-screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin $rpc_username $rpc_password
+screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin --bitcoind-address 127.0.0.1 --bitcoind-p2p-port 22556 --bitcoind-rpc-port 22555 --worker-port 22550 $rpc_username $rpc_password
 
 echo "+--------------------  ALL DONE  --------------------+"
 echo "|                                                    |"
