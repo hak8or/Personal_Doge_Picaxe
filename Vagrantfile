@@ -30,4 +30,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Script to setup the node.
   config.vm.provision "shell", path: "provision.sh"
+  
+  # Use squid's cache proxy to prevent me from hammering Canoical's servers
+  # and dogechain's CDN for bootstrap.dat when developing if the plugin is
+  # installed.
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    config.proxy.http     = "http://squid:squid@10.0.0.10:3128"
+    config.proxy.https    = "http://squid:squid@10.0.0.10:3128"
+    config.apt_proxy.http  = "http://squid:squid@10.0.0.10:3128"
+    config.proxy.no_proxy = "localhost,127.0.0.1,.example.com"
+  end
 end
