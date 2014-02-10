@@ -147,8 +147,9 @@ echo "|  in the meantime!                                  |"
 echo "|                                                    |"
 	
 # Keep refreshing this display and check every two minutes so we can know
-# the blockchain is fully synced.
-until [[ $client_block_count -eq  $dogechain_info_block_count ]]; do
+# the blockchain is fully synced. Greater or equal to is because the dogechain
+# wallet is not always fully up to date.
+until [[ $client_block_count -ge $dogechain_info_block_count ]]; do
 	cd $working_directory
 
 	# Get a new block count.
