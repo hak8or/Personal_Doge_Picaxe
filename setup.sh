@@ -18,12 +18,12 @@ working_directory="$HOME"
 log_location="$working_directory/dogecoin_p2p_node.log"
 
 # Make the logging file
-    echo "  [1/6] Making log file"
+    echo "  [1/7] Making log file"
 	mkdir -p $working_directory
 	touch $log_location &>>/dev/null
 
 # Install all the required requisists
-    echo "  [2/6] Installing dependencies"
+    echo "  [2/7] Installing dependencies"
     echo "----FROM SCRIPT ECHO---- Installing dependencies" &>>$log_location
 
 	    echo "    |- [1/4] Adding bitcoin PPA"
@@ -45,7 +45,7 @@ log_location="$working_directory/dogecoin_p2p_node.log"
 		sudo apt-get -y install python-zope.interface python-twisted python-twisted-web &>>$log_location
 
 # Get the dogecoin client from github.
-    echo "  [3/6] Installing the dogecoin client"
+    echo "  [3/7] Installing the dogecoin client"
     echo "----FROM SCRIPT ECHO---- Installing the dogecoin client" &>>$log_location
 
 		echo "    |- [1/4] Cloning dogecoin repo"
@@ -83,7 +83,7 @@ log_location="$working_directory/dogecoin_p2p_node.log"
 	    rm -r -f $working_directory/dogecoin &>>$log_location
 
 # Configuring dogecoin client
-    echo "  [4/6] Configuring dogecoin client"
+    echo "  [4/7] Configuring dogecoin client"
     echo "----FROM SCRIPT ECHO---- Configuring dogecoin client" &>>$log_location
     mkdir $working_directory/.dogecoin &>>$log_location
 	touch $working_directory/.dogecoin/dogecoin.conf &>>$log_location
@@ -104,15 +104,23 @@ log_location="$working_directory/dogecoin_p2p_node.log"
 		daemon=1
 _EOF_
 
+# Download bootstrap.dat to speed up initial blockchain sync.
+    echo "  [5/7] Downloading bootstrap.dat (1GB ish)"
+    echo "----FROM SCRIPT ECHO---- Downloading bootstrap.dat" &>>$log_location
+	
+	cd $working_directory
+    wget http://smibacdn.nl/smiba/doge/bootstrap.dat &>>/dev/null
+    mv bootstrap.dat $working_directory/.dogecoin/
+
 # Starting dogecoin client
-    echo "  [5/6] Running dogecoin client"
+    echo "  [6/7] Running dogecoin client"
     echo "----FROM SCRIPT ECHO---- Running dogecoin client" &>>$log_location
 
     cd $working_directory
     sudo ./dogecoind
 
 # Installing p2p pool
-    echo "  [6/6] Installing P2P pool"
+    echo "  [7/7] Installing P2P pool"
     echo "----FROM SCRIPT ECHO---- Installing P2P pool" &>>$log_location
 
 		echo "    |- [1/2] Cloning P2P pool repo"
