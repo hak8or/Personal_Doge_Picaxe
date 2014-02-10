@@ -13,16 +13,9 @@ echo "+----------------------------------------------------+"
 rpc_username=cooluser
 rpc_password=$(strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo)
 
-# When the script gets provisioned on a vagrant box, the current home directory is root,
-# which is not what we want. So, if the vagrant option is put in from the vagrantfile then
-# this will be installed into /home/vagrant instead of /vagrant/root.
-if [[ $1 == "vagrant" ]]; then
-    working_directory="/home/vagrant"
-    log_location="$working_directory/dogecoin_p2p_node.log"
-else
-    working_directory="$HOME"
-    log_location="$working_directory/dogecoin_p2p_node.log"
-fi
+# Where the majority of this script will be run.
+working_directory="$HOME"
+log_location="$working_directory/dogecoin_p2p_node.log"
 
 # Make the logging file
     echo "  [1/6] Making log file"
