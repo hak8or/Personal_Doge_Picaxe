@@ -60,9 +60,9 @@ log_location="$working_directory/dogecoin_p2p_node.log"
 	    if [ $memory_size_KB -lt 1048576 ]; then
 	        echo "    |- [2/5] Changing swap file size to 1 GB"
 	        echo "----FROM SCRIPT ECHO---- Changing swap file size to 1 GB" &>>$log_location
-	        dd if=/dev/zero of=/swap bs=1M count=1024 &>>$log_location
-	        mkswap /swap &>>$log_location
-	        swapon /swap &>>$log_location
+	        sudo dd if=/dev/zero of=/swap bs=1M count=1024 &>>$log_location
+	        sudo mkswap /swap &>>$log_location
+	        sudo swapon /swap &>>$log_location
 	    else
 	        echo "    |- [2/5] Not changing swap file size to 1 GB"
 	        echo "----FROM SCRIPT ECHO---- Not changing swap file size to 1 GB" &>>$log_location
