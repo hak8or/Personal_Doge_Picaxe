@@ -182,20 +182,15 @@ echo "|  Done syncing blockchain!                          |"
 # Start the P2P pool so users can connect their miners.
 screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin --bitcoind-address 127.0.0.1 --bitcoind-p2p-port 22556 --bitcoind-rpc-port 22555 --worker-port 22550 $rpc_username $rpc_password
 
+miner_target=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
+miner_target+=":22550"
+
 echo "+--------------------  ALL DONE  --------------------+"
 echo "|                                                    |"
 echo "|  RPC Username: $rpc_username                            |"
 echo "|  RPC Password: $rpc_password      |"
 echo "|  Status of p2p pool: screen -x myp2pool            |"
 echo "|                                                    |"
-
-if [[ $1 == "vagrant" ]]; then
-	miner_target=localhost:22550
-else
-	miner_target=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
-	miner_target+=":22550"
-fi
-
 echo "|  Point your miner at: $miner_target              |"
 echo "|  Node web GUI: $miner_target                     |"
 echo "+----------------------------------------------------+"
