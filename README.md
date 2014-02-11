@@ -15,6 +15,7 @@ Why would you want to use P2P pool in the first place?
 - P2P pool is very scalable, it can easily handle the entire dogecoin hash rate.
 - There is no owner! Not only does this prevent the pool being used for a 51% attack, it also means no one can steal your coins!
 - You also get in on transaction fee's! (?)
+- [This] (http://www.reddit.com/r/dogemining/comments/1uncvb/the_benefits_of_mining_using_p2pool_better) Reddit post gives more benefits and discussion.
 
 
 So, how do you get started? Easy!
