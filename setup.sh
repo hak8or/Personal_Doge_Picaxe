@@ -18,12 +18,12 @@ working_directory="$HOME"
 log_location="$working_directory/dogecoin_p2p_node.log"
 
 # Make the logging file
-    echo "  [1/7] Making log file"
+    echo "  [1/8] Making log file"
 	mkdir -p $working_directory
 	touch $log_location &>>/dev/null
 
 # Install all the required requisists
-    echo "  [2/7] Installing dependencies"
+    echo "  [2/8] Installing dependencies"
     echo "----FROM SCRIPT ECHO---- Installing dependencies" &>>$log_location
 
 	    echo "    |- [1/4] Adding bitcoin PPA"
@@ -45,7 +45,7 @@ log_location="$working_directory/dogecoin_p2p_node.log"
 		sudo apt-get -y install python-zope.interface python-twisted python-twisted-web &>>$log_location
 
 # Get the dogecoin client from github.
-    echo "  [3/7] Installing the dogecoin client"
+    echo "  [3/8] Installing the dogecoin client"
     echo "----FROM SCRIPT ECHO---- Installing the dogecoin client" &>>$log_location
 
 		echo "    |- [1/4] Cloning dogecoin repo"
@@ -83,7 +83,7 @@ log_location="$working_directory/dogecoin_p2p_node.log"
 	    rm -r -f $working_directory/dogecoin &>>$log_location
 
 # Configuring dogecoin client
-    echo "  [4/7] Configuring dogecoin client"
+    echo "  [4/8] Configuring dogecoin client"
     echo "----FROM SCRIPT ECHO---- Configuring dogecoin client" &>>$log_location
     mkdir $working_directory/.dogecoin &>>$log_location
 	touch $working_directory/.dogecoin/dogecoin.conf &>>$log_location
@@ -105,7 +105,7 @@ log_location="$working_directory/dogecoin_p2p_node.log"
 _EOF_
 
 # Download bootstrap.dat to speed up initial blockchain sync.
-    echo "  [5/7] Downloading bootstrap.dat (1GB ish)"
+    echo "  [5/8] Downloading bootstrap.dat (1GB ish)"
     echo "----FROM SCRIPT ECHO---- Downloading bootstrap.dat" &>>$log_location
 	
 	cd $working_directory
@@ -113,14 +113,14 @@ _EOF_
     mv bootstrap.dat $working_directory/.dogecoin/
 
 # Starting dogecoin client
-    echo "  [6/7] Running dogecoin client"
+    echo "  [6/8] Running dogecoin client"
     echo "----FROM SCRIPT ECHO---- Running dogecoin client" &>>$log_location
 
     cd $working_directory
     sudo ./dogecoind
 
 # Installing p2p pool
-    echo "  [7/7] Installing P2P pool"
+    echo "  [7/8] Installing P2P pool"
     echo "----FROM SCRIPT ECHO---- Installing P2P pool" &>>$log_location
 
 		echo "    |- [1/2] Cloning P2P pool repo"
@@ -132,6 +132,30 @@ _EOF_
 	    echo "----FROM SCRIPT ECHO---- Setting up P2P pool" &>>$log_location
 	    cd $working_directory/p2pool/litecoin_scrypt &>>$log_location
 		sudo python setup.py install &>>$log_location
+
+# Generate a startup script for when user wants to easily start everything up.
+# Mainly to get around the super long p2p pool setup command.
+	echo "  [8/8] Generate startup script"
+    echo "----FROM SCRIPT ECHO---- Generate startup script" &>>$log_location
+
+    cd $working_directory &>>$log_location
+	touch $working_directory/startup.sh &>>$log_location
+
+	cat <<- _EOF_ >$working_directory/startup.sh
+		#!/usr/bin/env bash
+		cd $working_directory
+    	sudo ./dogecoind
+
+		screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin --bitcoind-address 127.0.0.1 --bitcoind-p2p-port 22556 --bitcoind-rpc-port 22555 --worker-port 22550 $rpc_username $rpc_password
+
+		echo "RPC Username: $rpc_username"
+		echo "RPC Password: $rpc_password"
+
+		echo "To view p2p pool output, use the following:"
+		echo "  screen -x myp2pool"
+_EOF_
+
+	sudo chmod 777 startup.sh
 
 # Set up starting conditions for the later loop of polling block size.
 	client_block_count=0

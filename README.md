@@ -37,11 +37,9 @@ vagrant up # Now we wait ...
 
 You can view the nodes status as well as your mining results at ```localhost:22550``` and the pools output with the ```screen -x myp2pool``` command.
 
-If you restarted, then run the following to get everything back up.
+If you restarted the vagrant box, then run the following to get everything back up.
 ```Batchfile
-sudo ./dogecoind
-screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin your_rpc_username your_rpc_password
-screen -x myp2pool # Optional, run to see pool output
+sudo ./startup.sh
 ```
 
 Troubleshooting
