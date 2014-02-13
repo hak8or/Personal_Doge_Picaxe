@@ -5,7 +5,7 @@
 # being that the web page is not responsive.
 
 # First checks to see if the p2p pool node's web service is giving us an HTTP 200 code.
-$node_frontend_code = curl -sL -w "%{http_code}\\n" "127.0.0.1:22550" -o /dev/null
+node_frontend_code=$(curl -sL -w "%{http_code}\\n" "127.0.0.1:22550" -o /dev/null)
 
 # If the front end is down, restart both the dogecoin client and the node.
 if [[ $node_frontend_code -ne 200 ]]; then
@@ -22,5 +22,5 @@ if [[ $node_frontend_code -ne 200 ]]; then
 	sudo pkill -KILL python
 
 	echo "Restarting dogecoind and p2p pool now!"
-	sudo ./startup.sh
+	./startup.sh
 fi
