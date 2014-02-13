@@ -12,11 +12,15 @@ if [[ $node_frontend_code -ne 200 ]]; then
 	echo "Node front end failure detected!"
 
 	# pkill shouldn't implode if dogecoind process does not exist.
-	echo "Restarting dogecoin client."
+	echo "Shutting down dogecoin client."
 	sudo pkill -KILL dogecoind
-	sudo ./dogecoind
 
 	# Same as above, but for the node.
-	echo "Restarting P2P Pool node."
-	# Restart the node here!
+	# This kills all running python processes, not ideal in the least, but assuming this is a vagrant box
+	# setup by me, all should be fine.
+	echo "Shutting down P2P Pool node."
+	sudo pkill -KILL python
+
+	echo "Restarting dogecoind and p2p pool now!"
+	sudo ./startup.sh
 fi
