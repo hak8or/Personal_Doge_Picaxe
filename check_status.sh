@@ -9,18 +9,22 @@ node_frontend_code=$(curl -sL -w "%{http_code}\\n" "127.0.0.1:22550" -o /dev/nul
 
 # If the front end is down, restart both the dogecoin client and the node.
 if [[ $node_frontend_code -ne 200 ]]; then
-	echo "Node front end failure detected!"
+	echo "---- Node front end failure detected!" >> /var/log/p2p_health.log
+	echo "Time: $(date)" >> /var/log/p2p_health.log
 
 	# pkill shouldn't implode if dogecoind process does not exist.
-	echo "Shutting down dogecoin client."
-	sudo pkill -KILL dogecoind
+	echo "Shutting down dogecoin client." >> /var/log/p2p_health.log
+	sudo pkill -KILL dogecoind &>> /var/log/p2p_health.log
 
 	# Same as above, but for the node.
 	# This kills all running python processes, not ideal in the least, but assuming this is a vagrant box
 	# setup by me, all should be fine.
-	echo "Shutting down P2P Pool node."
-	sudo pkill -KILL python
+	echo "Shutting down P2P Pool node." >> /var/log/p2p_health.log
+	sudo pkill -KILL python &>> /var/log/p2p_health.log
 
-	echo "Restarting dogecoind and p2p pool now!"
-	./startup.sh
+	echo "Restarting dogecoind and p2p pool now!" >> /var/log/p2p_health.log
+	./startup.sh &>> /var/log/p2p_health.log
+
+	# Put in an extra line into the log file.
+	echo "" >> /var/log/p2p_health.log
 fi

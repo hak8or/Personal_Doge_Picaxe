@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+# For making the script stop if something fails like make.
+set -e 
+set -o pipefail
+
 echo "+----------------------------------------------------+"
 echo "|     Sets up a P2P mining node for you locally!     |"
 echo "|                                                    |"
@@ -15,15 +20,15 @@ rpc_password=$(strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d
 
 # Where the majority of this script will be run.
 working_directory="$HOME"
-log_location="$working_directory/dogecoin_p2p_node.log"
+log_location="$working_directory/dogecoin_node.log"
 
 # Make the logging file
-    echo "  [1/8] Making log file"
+    echo "  [1/9] Making log file"
 	mkdir -p $working_directory
 	touch $log_location &>>/dev/null
 
 # Install all the required requisists
-    echo "  [2/8] Installing dependencies"
+    echo "  [2/9] Installing dependencies"
     echo "----FROM SCRIPT ECHO---- Installing dependencies" &>>$log_location
 
 	    echo "    |- [1/4] Adding bitcoin PPA"
@@ -33,7 +38,7 @@ log_location="$working_directory/dogecoin_p2p_node.log"
 		echo "    |- [2/4] Updating and upgrading Ubuntu"
 		echo "----FROM SCRIPT ECHO---- Updating and upgrading Ubuntu" &>>$log_location
 		sudo apt-get update &>>$log_location
-		sudo apt-get upgrade &>>$log_location
+		sudo apt-get -y upgrade &>>$log_location
 
 		echo "    |- [3/4] Tools to build dogecoin"
 		echo "----FROM SCRIPT ECHO---- Installing tools to build dogecoin" &>>$log_location
@@ -45,7 +50,7 @@ log_location="$working_directory/dogecoin_p2p_node.log"
 		sudo apt-get -y install python-zope.interface python-twisted python-twisted-web &>>$log_location
 
 # Get the dogecoin client from github.
-    echo "  [3/8] Installing the dogecoin client"
+    echo "  [3/9] Installing the dogecoin client"
     echo "----FROM SCRIPT ECHO---- Installing the dogecoin client" &>>$log_location
 
 		echo "    |- [1/4] Cloning dogecoin repo"
@@ -83,7 +88,7 @@ log_location="$working_directory/dogecoin_p2p_node.log"
 	    rm -r -f $working_directory/dogecoin &>>$log_location
 
 # Configuring dogecoin client
-    echo "  [4/8] Configuring dogecoin client"
+    echo "  [4/9] Configuring dogecoin client"
     echo "----FROM SCRIPT ECHO---- Configuring dogecoin client" &>>$log_location
     mkdir $working_directory/.dogecoin &>>$log_location
 	touch $working_directory/.dogecoin/dogecoin.conf &>>$log_location
@@ -105,7 +110,7 @@ log_location="$working_directory/dogecoin_p2p_node.log"
 _EOF_
 
 # Download bootstrap.dat to speed up initial blockchain sync.
-    echo "  [5/8] Downloading bootstrap.dat (1GB ish)"
+    echo "  [5/9] Downloading bootstrap.dat (1GB ish)"
     echo "----FROM SCRIPT ECHO---- Downloading bootstrap.dat" &>>$log_location
 	
 	cd $working_directory
@@ -113,14 +118,14 @@ _EOF_
     mv bootstrap.dat $working_directory/.dogecoin/
 
 # Starting dogecoin client
-    echo "  [6/8] Running dogecoin client"
+    echo "  [6/9] Running dogecoin client"
     echo "----FROM SCRIPT ECHO---- Running dogecoin client" &>>$log_location
 
     cd $working_directory
     sudo ./dogecoind
 
 # Installing p2p pool
-    echo "  [7/8] Installing P2P pool"
+    echo "  [7/9] Installing P2P pool"
     echo "----FROM SCRIPT ECHO---- Installing P2P pool" &>>$log_location
 
 		echo "    |- [1/2] Cloning P2P pool repo"
@@ -135,7 +140,7 @@ _EOF_
 
 # Generate a startup script for when user wants to easily start everything up.
 # Mainly to get around the super long p2p pool setup command.
-	echo "  [8/8] Generate startup script"
+	echo "  [8/9] Generate startup script"
     echo "----FROM SCRIPT ECHO---- Generate startup script" &>>$log_location
 
     cd $working_directory &>>$log_location
@@ -156,6 +161,19 @@ _EOF_
 _EOF_
 
 	sudo chmod 777 startup.sh
+
+# Sets up the cron job and checking script to see if everything is still working
+# A OK. 
+	echo "  [9/9] Setting up crypto health checks"
+    echo "----FROM SCRIPT ECHO---- Setting up crypto health checks" &>>$log_location
+
+    # Copy the health check script from /vagrant/ which holds the entire git repo on
+    # the host OS to the home directory within the vagrant box.
+    cp /vagrant/check_status.sh $working_directory &>>$log_location
+
+    # Generate a log file holding health failure notices.
+    sudo touch /var/log/p2p_health.log &>>$log_location
+    sudo chmod 777 /var/log/p2p_health.log &>>$log_location
 
 # Set up starting conditions for the later loop of polling block size.
 	client_block_count=0
@@ -203,8 +221,10 @@ done
 # Show that blockchain finished syncing.
 echo "|  Done syncing blockchain!                          |"
 
-# Start the P2P pool so users can connect their miners.
-screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin --bitcoind-address 127.0.0.1 --bitcoind-p2p-port 22556 --bitcoind-rpc-port 22555 --worker-port 22550 $rpc_username $rpc_password
+# Make a cron job to run the script every minute. It runs every minute, even 
+# after reboots, so there is no need to manually add in an entry for reboots.
+echo "|  Added cronjob for autorestart script.             |"
+echo '* * * * * $working_directory/check_status.sh' | crontab -
 
 miner_target=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
 miner_target+=":22550"
