@@ -225,7 +225,7 @@ echo "|  Done syncing blockchain!                          |"
 # after reboots, so there is no need to manually add in an entry for reboots.
 # 				!!!!! THIS OVERWRITES THE OLD CRONTAB !!!!!
 echo "|  Added cronjob for autorestart script.             |"
-echo '* * * * * $working_directory/check_status.sh' | crontab -
+echo "* * * * * $working_directory/check_status.sh" | crontab -
 
 miner_target=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
 miner_target+=":22550"
