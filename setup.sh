@@ -223,6 +223,7 @@ echo "|  Done syncing blockchain!                          |"
 
 # Make a cron job to run the script every minute. It runs every minute, even 
 # after reboots, so there is no need to manually add in an entry for reboots.
+# 				!!!!! THIS OVERWRITES THE OLD CRONTAB !!!!!
 echo "|  Added cronjob for autorestart script.             |"
 echo '* * * * * $working_directory/check_status.sh' | crontab -
 

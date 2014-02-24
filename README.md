@@ -37,10 +37,7 @@ vagrant up # Now we wait ...
 
 You can view the nodes status as well as your mining results at ```localhost:22550``` and the pools output with the ```screen -x myp2pool``` command.
 
-If you restarted the vagrant box, then run the following to get everything back up.
-```Batchfile
-sudo ./startup.sh
-```
+If you restarted the vagrant box, then just restart! Everything gets automatically run again via a cronjob behind the scenes.
 
 Troubleshooting
 ---------------
