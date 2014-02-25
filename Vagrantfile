@@ -26,7 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Script to setup the node.
-  config.vm.provision "shell", path: "setup.sh", :privileged => false
+  config.vm.provision "shell", path: "setup.rb", :privileged => false
   
   # Use squid's cache proxy to prevent me from hammering Canoical's servers
   # and dogechain's CDN for bootstrap.dat when developing if the plugin is
