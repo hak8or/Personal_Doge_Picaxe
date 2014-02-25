@@ -18,9 +18,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box"
-
-  # Disables the default shared folder vagrant does.
-  config.vm.synced_folder ".", "/vagrant", disabled: true
   
   config.vm.provider "virtualbox" do |v|
     # Memory is default at 490MB, p2p miner can require more if lots of
@@ -29,5 +26,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Script to setup the node.
-  config.vm.provision "shell", path: "provision.sh"
+  config.vm.provision "shell", path: "setup.sh", :privileged => false
+  
+  # Use squid's cache proxy to prevent me from hammering Canoical's servers
+  # and dogechain's CDN for bootstrap.dat when developing if the plugin is
+  # installed.
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    config.proxy.http     = "http://squid:squid@10.0.0.10:3128"
+    config.proxy.https    = "http://squid:squid@10.0.0.10:3128"
+    config.apt_proxy.http  = "http://squid:squid@10.0.0.10:3128"
+    config.proxy.no_proxy = "localhost,127.0.0.1,.example.com"
+  end
 end

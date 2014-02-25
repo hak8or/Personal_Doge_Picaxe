@@ -15,6 +15,7 @@ Why would you want to use P2P pool in the first place?
 - P2P pool is very scalable, it can easily handle the entire dogecoin hash rate.
 - There is no owner! Not only does this prevent the pool being used for a 51% attack, it also means no one can steal your coins!
 - You also get in on transaction fee's! (?)
+- [This] (http://www.reddit.com/r/dogemining/comments/1uncvb/the_benefits_of_mining_using_p2pool_better) Reddit post gives more benefits and discussion.
 
 
 So, how do you get started? Easy!
@@ -29,39 +30,20 @@ So, how do you get started? Easy!
 git clone git://github.com/hak8or/Personal_Doge_Picaxe.git
 cd Personal_Doge_Picaxe
 vagrant up # Now we wait ...
-vagrant ssh
 ```
-4) Wait for the dogecoin client to download the blockchain, which can take a few solid hours. Go browse /r/dogecoin in the meantime! You can see what block the client is up to by using ```./dogecoind getinfo | grep blocks ```, and compare it to "Blocks in Chain" on [dogechain.info] (http://dogechain.info/chain/Dogecoin).
+3) Wait for the dogecoin client to download the blockchain, which can take a few solid hours. Go browse /r/dogecoin in the meantime!
 
-5) Once the dogecoin client is done downloading the blockchain, run the following to start p2p pool.
-```Batchfile
-screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin cooluser superduperpassword12
-```
-
-6) Point your miner at ```localhost:22550```
+4) Once the dogecoin client is done downloading the blockchain, you can point your miners to your new local node by using ```localhost:22550```
 
 You can view the nodes status as well as your mining results at ```localhost:22550``` and the pools output with the ```screen -x myp2pool``` command.
 
-If you restarted, then run the following to get everything back up.
-```Batchfile
-sudo ./dogecoind
-screen -d -m -S myp2pool sudo ~/p2pool/run_p2pool.py --give-author 0 --net dogecoin cooluser superduperpassword12
-screen -x myp2pool # Optional, run to see pool output
-```
+If you restarted the vagrant box, then just restart! Everything gets automatically run again via a cronjob behind the scenes.
 
 Troubleshooting
 ---------------
 ##### *Confused shibe here!* What do I put in my mining program's command line? 
 I use [sgminer] (https://github.com/veox/sgminer) instead of cgminer since it is now actively developed for GPU mining unlike CGMiner's creator who does not wish to support alt-coins. The address is the foundation's general donation fund, so feel free to use it while testing.
 ``` sgminer -o stratum+tcp://localhost:22550 -u DJ7zB7c5BsB9UJLy1rKQtY7c6CQfGiaRLM -p x -I 20 ```
-
-
-##### I am running different cards, and one is getting a lot of rejects! How do I set share diff?
-A very good reject ratio is about 10%, %10-%15 is alright, but above 20% is not ideal. What is probably happening is your higher hash rate card is making the nodes difficulty go up further than your slower card can handle. Try adding to your username a fixed share difficulty for the slower card by multiplying the hash rate of your card by 0.0000166 with a plus sign. For example, a 7950 runs at 600 Khash/s, so you do 0.0000166 * 600 to give you 0.00996. 
-
-Then your new username will be ``` DJ7zB7c5BsB9UJLy1rKQtY7c6CQfGiaRLM+0.00996 ```, which gives you this in the command line: ``` sgminer -o stratum+tcp://localhost:22550 -u DJ7zB7c5BsB9UJLy1rKQtY7c6CQfGiaRLM+0.00996 -p x -I 20 ```.
-
-If you want to do this on a per card basis in a multi-card setup, with each card getting a different share difficulty, then you will need to run a separate sgminer process for cards with different share difficulties. 
 
 
 ##### I have been mining for over 12 hours and nothing!
@@ -76,29 +58,15 @@ P2P pool is as of January 30th about only 1.53 Ghash/s, a far cry from the total
 This should only be happening if you are running multiple different cards on the node. Try to decrease the share difficulty (the +somenumber) value on the slower card with more rejects.
 
 
-##### I want to put this online for other users to use!
-You can totally do that with this! The more on P2P pool the merrier! But, you need to change the password for the dogecoind client to something other than superduperpassword12. Look through the script to find out where the password is stored for dogecoind.
-
-```Batchfile
-# How to run the setup script by itself.
-wget https://raw.github.com/hak8or/Personal_Doge_Picaxe/master/setup.sh
-chmod 777 setup.sh
-sudo ./setup.sh
-```
-
-
-##### I want to change the RPC credentials!
-There is no very easy way to do this, but what I reccomend is change your credentials in ``` ~/.dogecoin/dogecoin.conf ``` for rpc_username and rpc_password, restart the dogecoin client (just restart the machine with ``` sudo reboot ``` for simplicity), and then when running that super long ``` screen ... ~/p2pool/run_p2pool.py rpc_username_goes_here rpc_password_goes_here``` command use your new credentials. 
-
-If you know what you are doing, just fork the repo and change rpc_username and rpc_password in ``` setup.sh ``` to what you want, along with what to wget in ``` provision.sh ```.
-
-
 ##### What is up with all the litecoin things? 
 You can safely ignore that, I haven't swapped out the litecoin assets for dogecoin yet.
 
 
 ##### My HW error rate is insainly high!
 This is normal, the node is setting up the difficulty for the first time. Let your miners run for maybe a minute or two and then restart them, everything should be fine.
+
+
+Make sure to check the [wiki] (https://github.com/hak8or/Personal_Doge_Picaxe.wiki.git) for other questions and possible solutions not found here!
 
 
 Worthy links
