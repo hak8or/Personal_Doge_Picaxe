@@ -18,6 +18,10 @@ Why would you want to use P2P pool in the first place?
 - [This] (http://www.reddit.com/r/dogemining/comments/1uncvb/the_benefits_of_mining_using_p2pool_better) Reddit post gives more benefits and discussion.
 
 
+##### This is still in Alpha!
+ Expect bugs and various issues. It works fine on my end, but not all edge cases are taken into consideration so various problems may show up. Send me an email or make an issue and I will get on it as soon as I can. This is NOT production ready.
+
+
 So, how do you get started? Easy!
 ---------------------------------
 1) Download and install:
@@ -38,6 +42,7 @@ vagrant up # Now we wait ...
 You can view the nodes status as well as your mining results at ```localhost:22550``` and the pools output with the ```screen -x myp2pool``` command.
 
 If you restarted the vagrant box, then just restart! Everything gets automatically run again via a cronjob behind the scenes.
+
 
 Troubleshooting
 ---------------
@@ -75,3 +80,6 @@ Worthy links
 - http://www.nckpnny.com/sharecalc/
 - http://dogechain.info/chain/Dogecoin
 - http://doges.org/index.php/topic,5586.0.html
+
+
+
