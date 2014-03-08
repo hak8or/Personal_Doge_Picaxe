@@ -43,7 +43,7 @@ public
 		# The tracer for added visual flair for the user to see what level
 		# we are in.
 		if @level != 0
-			if @current_item == 0 .. @total_items - 1 then tracer = '|- ' end
+			if (0 .. @total_items - 1).include?(@current_item) then tracer = '|- ' end
 			if @current_item == @total_items then tracer = '\- ' end
 			if @current_item > @total_items then tracer = '?  ' end
 		elsif @level == 0
