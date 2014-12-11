@@ -71,7 +71,7 @@ You can safely ignore that, I haven't swapped out the litecoin assets for dogeco
 This is normal, the node is setting up the difficulty for the first time. Let your miners run for maybe a minute or two and then restart them, everything should be fine.
 
 
-Make sure to check the [wiki] (https://github.com/hak8or/Personal_Doge_Picaxe.wiki.git) for other questions and possible solutions not found here!
+Make sure to check the [wiki] (https://github.com/hak8or/Personal_Doge_Picaxe/wiki) for other questions and possible solutions not found here!
 
 
 Worthy links
